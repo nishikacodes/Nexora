@@ -5,7 +5,7 @@ import os
 import re
 from duckduckgo_search import DDGS
 
-app = Flask(__name__)
+app = Flask(__name__,template_folder='.')
 client= Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
 @app.route("/")
