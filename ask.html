@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    </head> <head><title>Nexora- Ask AI</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></head>
+    <body style="background-image: url('https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center; background-attachment: fixed; background-repeat: no-repeat; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; color: white; font-family: Arial, sans-serif;">
+
+        <h1>Ask Nexora AI</h1>
+        <p>Type your question below</p>
+
+        <input id="question" type="text" placeholder="e.g. what is photosynthesis?" style="width:60%; padding:10px; font-size:16px;">
+        <br><br>
+
+<div style="display: flex; justify-content: center; gap: 15px; margin: 15px 0;">
+    <button onclick="startListening()" style="background-color: #e74c3c; color: white; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 18px;"><i class="fas fa-microphone"></i></button>
+    <button onclick="askAI()" style="background-color: #f4d03f; color: black; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 18px;"><i class="fas fa-paper-plane"></i></button>
+    <button onclick="speakAnswer()" style="background-color: #27ae60; color: white; border: none; width: 50px; height: 50px; border-radius: 50%; cursor: pointer; font-size: 18px;"><i class="fas fa-volume-up"></i></button>
+</div>
+
+        <br><br>
+        <div id="answer" style= "display:none; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 15px; border-radius: 8px;"></div>
+
+
+        <canvas id="diagram" width="400" height="300" style="display:none; background:white; margin:20px auto; border-radius:10px;"></canvas>
+
+        <script>
+
+async function askAI() {
+    const question = document.getElementById("question").value;
+    if (!question) {
+        alert("Please type a question!");
+        return;
+    }
+
+    document.getElementById("answer").style.display = "block";
+    document.getElementById("answer").innerHTML = "Loading...";
+
+    try {
+        const res = await fetch("/ask", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ question: question })
+        });
+        const data = await res.json();
+        
+        // Displays only the clean text answer from your app.py server
+        document.getElementById("answer").innerHTML = data.answer.replace(/\n/g, "<br>");
+        
+        const speech = new SpeechSynthesisUtterance(data.answer);
+        window.speechSynthesis.speak(speech);
+    } catch (error) {
+        document.getElementById("answer").innerHTML = "Error connecting to AI server.";
+    }
+}
+
+            function startListening() {
+                const recognition = new webkitSpeechRecognition();
+                recognition.lang = 'en-US';
+                recognition.onresult = function(event) {
+                    document.getElementById("question").value = event.results[0][0].transcript;
+                };
+                recognition.start();
+                }
+                
+                function speakAnswer() {
+                    if (speechSynthesis.speaking) {
+                        speechSynthesis.cancel();
+                        return;
+                    }
+                    const text = document.getElementById("answer").innerText;
+                    const speech = new SpeechSynthesisUtterance(text);
+                    speechSynthesis.speak(speech);
+                }
+
+            </script>
+            
+            </body>
+           </html> 
+
+                
+            
+        
