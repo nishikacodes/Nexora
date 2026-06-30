@@ -37,15 +37,15 @@ def ask():
             Explain {question} in simple language for students.
 
             Answer ONLY in this format:
-            1. First point.
+            1. 
 
-            2. Second point.
+            2. 
 
-            3. Third point.
+            3. 
 
-            4. Fourth point.
+            4. 
 
-            5. Fifth point.
+            5. 
 
             Rules:
             Answer in numbered points only.
