@@ -61,7 +61,7 @@ def ask():
             """ 
             
         }],
-        model="llama-3.3-70b-versatile",
+        model="openai/gpt-oss-120b",
     )
     answer = chat_completion.choices [0].message.content
     return jsonify({"answer": answer})
